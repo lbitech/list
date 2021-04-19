@@ -5,7 +5,7 @@
 /* -------------------------------------------------------- */
 
 //  SETTINGS
-    $TYPE = 'Issues'; // ON CHANGES REMEMBER TO RENAME ALSO THE FILE IN THE /data/ FOLDER
+    $TYPE = 'GTD'; // ON CHANGES REMEMBER TO RENAME ALSO THE FILE IN THE /data/ FOLDER
     //      'Issues'     https://en.wikipedia.org/wiki/Issue_tracking_system
     //      'Bugs'       https://en.wikipedia.org/wiki/Bug_tracking_system
     //      'MOSCOW'     https://en.wikipedia.org/wiki/MoSCoW_method
