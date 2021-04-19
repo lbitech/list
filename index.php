@@ -72,6 +72,39 @@ if(!@$_SESSION[$sessionname] && (!isset($USEL) || $USEL == TRUE) )
 // FOR DEBUG ONLY
 if ( isset($_GET['php']) AND $_GET['php'] == 'info' ) die( phpinfo() );
 
+// PARSE INITIALISATION SECTION
+// echo 'got here! In db query <br />';
+require 'parse-php-sdk/autoload.php';
+
+use Parse\ParseObject;
+use Parse\ParseQuery;
+use Parse\ParseACL;
+use Parse\ParsePush;
+use Parse\ParseUser;
+use Parse\ParseInstallation;
+use Parse\ParseException;
+use Parse\ParseAnalytics;
+use Parse\ParseFile;
+use Parse\ParseCloud;
+use Parse\ParseClient;
+
+$app_id = '2fdFVmfY2WTa3RISTWMLQ8N3FuTRgmc4cKYXvpPa';
+$rest_key = 'MCCMMpGiAwpvk4Kc8gN1n5YgdS0S2zJgvAI6H4Yk';
+$master_key = 'kHb3KWDYaodWMBhh2sEMs7ZuVILvBCGJMC94DMZL';
+//echo 'got here! 3<br />';
+
+ParseClient::initialize( $app_id, $rest_key, $master_key);
+ParseClient::setServerURL('https://parseapi.back4app.com','/');
+//echo 'got here! 1<br />';
+$health = ParseClient::getServerHealth();
+if($health['status'] === 200) {
+    //echo 'All cool!';
+}
+else {
+  //echo 'ALERT!<br /> Status = ' . $health['status'] . '<br /> Response = ' . $health['response'] . '<br />';
+}
+
+
 // DELETE ENTRY IF DEL LINK IS CLICKED
 if ( @$_GET['delete_id'] != '' AND (@$_SESSION[$sessionname]=='admin' OR $ADEL == false OR $USEL == false)) {
 	$dat = json_decode( str_replace("\u00a0", '&nbsp;', file_get_contents( $file ) ), true );
@@ -294,6 +327,50 @@ if ( !empty( $dat ) ) {
   <tbody>
   ';
 
+  // TABLE2 HEADER
+  $table2 = '
+  <table class="striped responsive-table hoverable tablesorter {sortlist:['.$SORT.']}" id="table">
+    <thead>
+      <tr style="line-height:1;">
+      <th style="vertical-align:top;text-align:center">Order Number</th>
+      <th style="vertical-align:top;text-align:center">TimeStamp</th>
+      <th style="vertical-align:top;text-align:center">Number of items</th>
+      <th style="vertical-align:top;text-align:center">Open Order</th>
+      </tr>
+    </thead>
+  <tbody>
+  ';
+
+
+  $query = new ParseQuery("Lists");
+  $results = $query->find();
+  foreach($results as $result) {
+    //echo 'Object found ' . $result->getObjectId() . '<br>';
+    $txDate = $result->getCreatedAt()->format('Y-m-d H:i:s');
+    //echo '<br> Date = ' . $txDate ;
+
+        // SET TABLE LINE
+        $css = '';
+        require 'types/'.$TYPE.'/status.php';
+        $toast = 'M.toast({html: "<span>'.mb_strimwidth($values['name'],0,$NLEN/3,'...').'</span>'.
+                 '<a href=?delete_id='.$key.' class=toast-action>'.
+                 $i18n['DELETE'].'</a>&nbsp;&nbsp;"});';
+        $table2 .= '<tr style="line-height:1;">.
+        <td style="vertical-align:top;text-align:center" title="">' . $result->get("list") . '</td>.
+        <td style="vertical-align:top;text-align:center;white-space:nowrap;">' . $txDate . '</td>.
+        <td style="vertical-align:top;text-align:center;min-width:100px;" title="NAME">' . $result->get("todos") . '</td>.
+        <td title="Edit" style="vertical-align:top;text-align:center">'.
+              /* SHOW DEL LINK ONLY FOR ADMIN (IF IT IS SO CONFIGURED) */
+              //((@$_SESSION[$sessionname]=='admin' OR $ADEL == false OR $USEL == false)?
+              //'<a class="tooltipped" data-position="top"'.
+              //' data-tooltip="'.$i18n['Click alert link for delete!'].'"'.
+              //' href="#" onclick=\''.$toast.'\'><icon'. 
+              //' del></icon></a>&emsp;':''). 
+              '<a class="tooltipped" data-position="top" data-tooltip="'.$i18n['EDIT'].'"'.
+              ' href="edit.php?id='. $result->get("note") .'"><icon edit></icon></a>&emsp;'.
+              '</td></tr>';
+  }
+
   // LOOP EACH ENTRY
   foreach( $dat as $key => $values ) {
 
@@ -397,7 +474,8 @@ if ( !empty( $dat ) ) {
     echo '<tr><td colspan="5"><h3 class="center grey-text text-darken-2">'.
          $i18n['Nothing Found!'].'</h3></td></tr>';
   else // ECHO TABLE
-    echo $table.'</tbody></table><br>';
+  // changed to table2 for test
+    echo $table2.'</tbody></table><br>';
 
   // SHOW FORM UNDER TABLE
   if (isset($FORM) && $FORM==true) echo $input_form;
