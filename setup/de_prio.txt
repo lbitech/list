@@ -1,0 +1,5 @@
+          <option>3&nbsp;TOP</option>
+          <option>2&nbsp;HOCH</option>
+          <option>1&nbsp;MEDIUM</option>
+          <option>0&nbsp;NIEDRIG</option>
+          <option>-1&nbsp;NEGATIV</option>

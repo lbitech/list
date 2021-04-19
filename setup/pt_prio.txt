@@ -1,0 +1,5 @@
+          <option>3&nbsp;Máxima</option>
+          <option>2&nbsp;Alta</option>
+          <option>1&nbsp;Média</option>
+          <option>0&nbsp;Baixa</option>
+          <option>-1&nbsp;Negativa</option>

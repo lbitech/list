@@ -1,0 +1,10 @@
+          <option>EM&nbsp;ATRASADO</option>
+          <option>Em&nbsp;Andamento</option>
+          <option>A&nbsp;Fazer</option>
+          <option>Em&nbsp;Projeto</option>
+          <option>Encaminhado&nbsp;Para&nbsp;Compras</option>
+		  <option>Comprado</option>
+		  <option>Recebido</option>
+		  <option>Em&nbsp;Montagem</option>
+		  <option>Concluído</option>
+		  
